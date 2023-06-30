@@ -1,0 +1,103 @@
+using Caliburn.Micro;
+using OngekiFumenEditor.Base;
+using OngekiFumenEditor.Base.OngekiObjects;
+using OngekiFumenEditor.Modules.FumenVisualEditor.Base;
+using OngekiFumenEditor.Modules.FumenVisualEditor.Kernel;
+using OngekiFumenEditor.Utils;
+using OngekiFumenEditorPlugins.EditorScriptExecutor.Scripts;
+using System.Linq;
+using System.Collections.Generic;
+using System.IO;
+using OngekiFumenEditorPlugins.OngekiFumenSupport;
+using System.Diagnostics;
+//获取编辑器目标对象
+var targetEditor = ScriptArgs.TargetEditor;
+if (targetEditor is null)
+    return;
+
+var lines = File.ReadAllLines(@"C:\Users\MikiraSora\Desktop\Life is Piano\0895_03.c2s");
+var cmdArgs = new CommandArgs();
+
+TGrid calcTGrid(int measure, int offset)
+{
+    return new TGrid(measure, offset * 5);
+}
+
+var genList = new List<OngekiObjectBase>();
+//Debugger.Break();
+
+var curRollX = 0;
+XGrid getRollXGrid()
+{
+    var xGrid = new XGrid(25 + curRollX, 0);
+    curRollX = (curRollX + 1) % 3;
+    return xGrid;
+}
+
+foreach (var line in lines)
+{
+    cmdArgs.Line = line;
+    TGrid getTGrid() => calcTGrid(cmdArgs.GetData<int>(1), cmdArgs.GetData<int>(2));
+
+    var ongekiObject = default(OngekiObjectBase);
+    switch (cmdArgs.GetData<string>(0).ToUpper())
+    {
+        case "FLK":
+        case "AIR":
+        case "CHR":
+        case "TAP": 
+        case "AHD":
+        case "HLD":
+        case "SLC":
+        case "SLD":
+            ongekiObject = new Tap()
+            {
+                TGrid = getTGrid(),
+                XGrid = getRollXGrid()
+            };
+            break;/*
+        case "HLD":
+        case "SLC":
+        case "SLD":
+            var hold = new Hold()
+            {
+                TGrid = getTGrid(),
+                XGrid = getRollXGrid()
+            };
+            var duration = cmdArgs.GetData<int>(5);
+            var end = new HoldEnd() { TGrid = hold.TGrid + new GridOffset(0, duration) };
+            hold.AddChildObject(end);
+            ongekiObject = hold;
+            break;
+        case "AHD":
+            var hold2 = new Hold()
+            {
+                TGrid = getTGrid(),
+                XGrid = getRollXGrid()
+            };
+            var duration2 = cmdArgs.GetData<int>(6);
+            var end2 = new HoldEnd() { TGrid = hold2.TGrid + new GridOffset(0, duration2) };
+            hold2.AddChildObject(end2);
+            ongekiObject = hold2;
+            break;*/
+        case "MET":
+        case "BPM":
+        default:
+            break;
+    }
+
+    if (ongekiObject != null)
+        genList.Add(ongekiObject);
+}
+
+Log.LogDebug("GOOD");
+
+
+targetEditor.UndoRedoManager.ExecuteAction(LambdaUndoAction.Create("[脚本]采音抄袭",
+    () =>
+    {
+        targetEditor.Fumen.AddObjects(genList);
+    }, () =>
+    {
+        targetEditor.Fumen.RemoveObjects(genList);
+    }));
