@@ -12,9 +12,9 @@
     "ForceTapHoldMagneticDockToLane": false,
     "ForceMagneticDock": true,
     "JudgeLineAlignBeat": false,
-    "XGridUnitSpace": 6,
+    "XGridUnitSpace": 3,
     "TGridUnitLength": 240,
-    "BeatSplit": 8,
+    "BeatSplit": 1,
     "XGridDisplayMaxUnit": 40,
     "EnableXOffset": true,
     "JudgeLineOffsetY": 75,
@@ -27,11 +27,39 @@
   },
   "FumenFilePath": "fumen.nyageki",
   "RememberLastDisplayTime": {
-    "Ticks": 5310150
+    "Ticks": 1226099623
   },
   "StoreBulletPalleteEditorDatas": {
     "A0": {
       "Name": "\u5360\u4F4D",
+      "AuxiliaryLineColor": {
+        "ColorContext": null,
+        "A": 255,
+        "R": 189,
+        "G": 183,
+        "B": 107,
+        "ScA": 1,
+        "ScR": 0.50888133,
+        "ScG": 0.4735315,
+        "ScB": 0.14702727
+      }
+    },
+    "A1": {
+      "Name": "A-0",
+      "AuxiliaryLineColor": {
+        "ColorContext": null,
+        "A": 255,
+        "R": 189,
+        "G": 183,
+        "B": 107,
+        "ScA": 1,
+        "ScR": 0.50888133,
+        "ScG": 0.4735315,
+        "ScB": 0.14702727
+      }
+    },
+    "A2": {
+      "Name": "A-1",
       "AuxiliaryLineColor": {
         "ColorContext": null,
         "A": 255,
